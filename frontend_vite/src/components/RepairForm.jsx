@@ -140,7 +140,7 @@ function RepairForm({ formType, job, addRepairCB, editRepairCB }) {
           >
             <option value="">Choose existing client</option>
             {clients.map((c) => (
-              <option value={c.id}>
+              <option key={c.id} value={c.id}>
                 {c.first_name} {c.last_name}
               </option>
             ))}

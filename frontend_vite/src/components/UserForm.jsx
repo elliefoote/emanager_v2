@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import SubmitModal from "../components/Modal";
+import SubmitModal from "./SuccessModal";
 import AuthContext from "../context/AuthContext";
 
 const INIT_STATE = {
