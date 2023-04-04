@@ -18,7 +18,7 @@ describe('RepairsController', () => {
         {
           provide: RepairsService,
           useValue: {
-            findAll: jest.fn().mockResolvedValue(['fake1', 'fake2']),
+            findAll: jest.fn().mockResolvedValue([{ id: 'fake1' }]),
             findOne: jest.fn().mockImplementation((id: string) => {
               Promise.resolve('fake!');
             }),
@@ -51,7 +51,7 @@ describe('RepairsController', () => {
 
   describe('getRepairs', () => {
     it('should return an array of repair jobs', async () => {
-      await expect(controller.findAll()).resolves.toEqual(['fake1', 'fake2']);
+      await expect(controller.findAll()).resolves.toEqual([{ id: 'fake1' }]);
     });
   });
 

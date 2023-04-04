@@ -8,7 +8,7 @@ import {
   Delete,
   UseGuards,
   NotFoundException,
-  BadRequestException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { RepairsService } from './repairs.service';
 import { CreateRepairDto } from './dto/create-repair.dto';
@@ -25,43 +25,61 @@ export class RepairsController {
 
   @Post()
   @ApiCreatedResponse({ type: RepairEntity })
-  create(@Body() createRepairDto: CreateRepairDto) {
-    console.log(createRepairDto);
-    return this.repairsService.create(createRepairDto);
+  async create(@Body() createRepairDto: CreateRepairDto) {
+    try {
+      return new RepairEntity(
+        await this.repairsService.create(createRepairDto),
+      );
+    } catch (err) {
+      // TODO - should provide the client with a more useful error/accurate msg
+      throw new InternalServerErrorException('Something went wrong!');
+    }
   }
 
   @Get()
   @ApiOkResponse({ type: RepairEntity, isArray: true })
-  findAll() {
-    return this.repairsService.findAll();
+  async findAll() {
+    const repairs = await this.repairsService.findAll();
+    return repairs.map((a) => new RepairEntity(a));
   }
 
   @Get('/user/:assigned_to')
   @ApiOkResponse({ type: RepairEntity, isArray: true })
-  findAllFilterByUser(@Param('assigned_to') assignedTo: string) {
-    return this.repairsService.findAll(assignedTo);
+  async findAllFilterByUser(@Param('assigned_to') assignedTo: string) {
+    const repairs = await this.repairsService.findAll(assignedTo);
+    return repairs.map((a) => new RepairEntity(a));
   }
 
   @Get(':id')
   @ApiOkResponse({ type: RepairEntity })
-  findOne(@Param('id') id: string) {
-    const repair = this.repairsService.findOne(id);
-    if (!repair) {
-      throw new NotFoundException(`Repair with ${id} does not exist.`);
+  async findOne(@Param('id') id: string) {
+    try {
+      return new RepairEntity(await this.repairsService.findOne(id));
+    } catch (err) {
+      throw new NotFoundException(`Repair with id ${id} could not be found.`);
     }
-    return repair;
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRepairDto: UpdateRepairDto) {
-    return this.repairsService.update(id, updateRepairDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateRepairDto: UpdateRepairDto,
+  ) {
+    try {
+      return new RepairEntity(
+        await this.repairsService.update(id, updateRepairDto),
+      );
+    } catch (err) {
+      throw new InternalServerErrorException('Repair could not be updated');
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    const deleted = this.repairsService.remove(id);
-    if (!deleted) {
-      throw new BadRequestException(`Deletion failed`);
+  async remove(@Param('id') id: string) {
+    try {
+      return new RepairEntity(await this.repairsService.remove(id));
+    } catch (err) {
+      throw new InternalServerErrorException('Repair could not be deleted');
     }
   }
 }
