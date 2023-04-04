@@ -23,7 +23,7 @@ const Home = () => {
   };
   const { user } = useContext(AuthContext);
   return (
-    <div className="hero h-screen">
+    <div className="hero h-screen -mt-24">
       <div className="hero-content text-center">
         <div className="max-w-md">
           <h1 className="text-5xl font-bold">
