@@ -1,7 +1,7 @@
 import { Repair } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserEntity } from 'src/users/model/user.entity';
-import { ClientEntity } from 'src/clients/model/client.entity';
+import { UserEntity } from '../../users/model/user.entity';
+import { ClientEntity } from '../../clients/model/client.entity';
 
 export class RepairEntity implements Repair {
   @ApiProperty()
