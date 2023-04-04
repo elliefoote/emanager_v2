@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import RepairForm from "../components/RepairForm";
 import API from "../helpers/API";
-import SubmitModal from "../components/Modal";
+import SuccessModal from "../components/SuccessModal";
 
 const EditRepairView = (props) => {
   let { repair_id } = useParams();
@@ -15,6 +15,9 @@ const EditRepairView = (props) => {
     assigned_to: "",
     notes: "",
   });
+  const [modalShow, setModalShow] = useState(false);
+  // TODO display error in modal/alert
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     getJob(repair_id);
@@ -29,16 +32,6 @@ const EditRepairView = (props) => {
     }
   };
 
-  // TODO improve error handling
-  const [modalShow, setModalShow] = useState(false);
-  const modalInfo = {
-    title: "Repair edited!",
-    closetext: "Do more edits",
-    backtext: "Go back to Repairs list",
-    backpath: "/repairs",
-  };
-  const [errorMsg, setErrorMsg] = useState("");
-
   const handleEditRepair = async (updatedRepairObj) => {
     console.log("line 43");
     let response = await API.updateContent(
@@ -46,7 +39,6 @@ const EditRepairView = (props) => {
       updatedRepairObj
     );
     if (response.ok) {
-      console.log("Repair edited!");
       setModalShow(true);
     } else {
       setErrorMsg(response.error);
@@ -63,12 +55,12 @@ const EditRepairView = (props) => {
         editRepairCB={(updatedRepairObj) => handleEditRepair(updatedRepairObj)}
         formType="Edit"
       />
-
-      <SubmitModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-        modalInfo={modalInfo}
-      />
+      {modalShow && (
+        <SuccessModal
+          alertText="Repair edited successfully"
+          closeModalCB={() => setModalShow(false)}
+        />
+      )}
     </div>
   );
 };

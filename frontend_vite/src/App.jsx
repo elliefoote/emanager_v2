@@ -2,9 +2,7 @@ import { useContext } from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import PrivateRoute from "./components/PrivateRoute";
-import Clients from "./pages/Clients";
 import Repairs from "./pages/Repairs";
-import AddClientView from "./pages/AddClientView";
 import AddRepairView from "./pages/AddRepairView";
 import EditRepairView from "./pages/EditRepairView";
 import MyJobs from "./pages/MyJobs";
@@ -25,15 +23,6 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LogIn />} />
           <Route path="/signup" element={<SignUp />} />
-
-          <Route
-            path="/clients/add"
-            element={
-              <PrivateRoute>
-                <AddClientView />
-              </PrivateRoute>
-            }
-          />
 
           <Route
             path="/repairs"

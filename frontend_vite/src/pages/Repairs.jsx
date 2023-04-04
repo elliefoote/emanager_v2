@@ -28,7 +28,8 @@ function Repairs(props) {
   const handleDelete = async (id) => {
     let response = await API.deleteContent(`/repairs/${id}`);
     if (response.ok) {
-      setClients(response.data);
+      let updatedRepairs = await getRepairs();
+      setRepairs(updatedRepairs);
     } else {
       setErrorMsg(response.error);
       setShow(true);
@@ -72,54 +73,61 @@ function Repairs(props) {
           </tr>
         </thead>
         <tbody>
-          {repairs
-            .filter((r) => {
-              if (input === "") {
-                return r;
-              } else if (r.model.toLowerCase().includes(input.toLowerCase())) {
-                return r;
-              } else if (r.brand.toLowerCase().includes(input.toLowerCase())) {
-                return r;
-              } else if (
-                r.serial_number.toLowerCase().includes(input.toLowerCase())
-              ) {
-                return r;
-              } else if (
-                r.client.first_name.toLowerCase().includes(input.toLowerCase())
-              ) {
-                return r;
-              } else if (
-                r.client.last_name.toLowerCase().includes(input.toLowerCase())
-              ) {
-                return r;
-              }
-            })
-            .map((r) => (
-              <tr key={r.id}>
-                <td>{r.model}</td>
-                <td>{r.brand}</td>
-                <td>{r.serial_number}</td>
-                <td>{r.repair_status}</td>
-                <td>{r.user.email}</td>
-                <td>
-                  {r.client.first_name} {r.client.last_name}
-                </td>
-                <td>
-                  <Link
-                    to={"/repairs/edit/" + r.id}
-                    className="btn btn-primary btn-sm me-2"
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={(e) => handleDelete(r.id)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
+          {repairs &&
+            repairs
+              .filter((r) => {
+                if (input === "") {
+                  return r;
+                } else if (
+                  r.model.toLowerCase().includes(input.toLowerCase())
+                ) {
+                  return r;
+                } else if (
+                  r.brand.toLowerCase().includes(input.toLowerCase())
+                ) {
+                  return r;
+                } else if (
+                  r.serial_number.toLowerCase().includes(input.toLowerCase())
+                ) {
+                  return r;
+                } else if (
+                  r.client.first_name
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                ) {
+                  return r;
+                } else if (
+                  r.client.last_name.toLowerCase().includes(input.toLowerCase())
+                ) {
+                  return r;
+                }
+              })
+              .map((r) => (
+                <tr key={r.id}>
+                  <td>{r.model}</td>
+                  <td>{r.brand}</td>
+                  <td>{r.serial_number}</td>
+                  <td>{r.repair_status}</td>
+                  <td>{r.user.email}</td>
+                  <td>
+                    {r.client.first_name} {r.client.last_name}
+                  </td>
+                  <td>
+                    <Link
+                      to={"/repairs/edit/" + r.id}
+                      className="btn btn-primary btn-sm me-2"
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={(e) => handleDelete(r.id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
         </tbody>
       </table>
     </Container>
