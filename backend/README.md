@@ -16,6 +16,9 @@ Create a .env file with the following secrets:
 ```bash
 # create & start container
 $ yarn start:dev:db
+
+# seed testing data
+$ yarn seed
 ```
 
 You can also create your own local DB with the following configuration:
