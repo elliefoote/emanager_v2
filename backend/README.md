@@ -16,9 +16,6 @@ Create a .env file with the following secrets:
 ```bash
 # create & start container
 $ yarn start:dev:db
-
-# seed testing data
-$ yarn seed
 ```
 
 You can also create your own local DB with the following configuration:
@@ -33,6 +30,19 @@ database: 'emanager'
 
 If you don't change any configuration, the DATABASE_URL env variable should be 'postgresql://postgres:1234@localhost:5432/emanager?schema=public'
 
+## Set up Prisma & seed DB
+
+```bash
+# get env variables & generate client
+$ npx prisma generate
+
+# push schema to db
+$ npx prisma db push
+
+# seed testing data
+$ yarn seed
+```
+
 ## Running the app
 
 ```bash
@@ -46,7 +56,7 @@ $ yarn run start:dev
 $ yarn run start:prod
 ```
 
-The server runs on port 5000.
+The server runs on port 5000. The documentation can be seen at localhost:5000/api.
 
 ## Test
 
